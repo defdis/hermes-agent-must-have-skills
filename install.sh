@@ -13,7 +13,7 @@ if [ -z "$INSTANCE_LIST" ]; then
   exit 1
 fi
 
-SKILLS="find-skills skill-creator llm-wiki dox-setup"
+SKILLS="find-skills skill-creator llm-wiki dox-setup officecli"
 HOOK_SRC="$REPO_DIR/hooks/block-dangerous-git.sh"
 
 for inst in $INSTANCE_LIST; do

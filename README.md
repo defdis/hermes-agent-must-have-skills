@@ -15,6 +15,7 @@
 | 3 | **git-guardrails** | Защита от git-факапов: блокирует `push --force`, `reset --hard`, `branch -D`, `clean -f`. Реализован как Hermes **Hook**, не скилл | см. [hooks/block-dangerous-git.sh](hooks/block-dangerous-git.sh) + инструкция ниже |
 | 4 | **llm-wiki** | Karpathy-паттерн: персистентная wiki-база знаний в маркдауне — инжест источников, кросс-ссылки, консистент-линт. RAG-альтернатива | скопировать каталог `skills/llm-wiki/` в `~/.hermes/skills/`, затем `/reload-skills` |
 | 5 | **dox-setup** | DOX = self-documenting проекты (agent0ai/dox): иерархия AGENTS.md, агент читает цепочку до правок и обновляет после | скопировать каталог `skills/dox-setup/` в `~/.hermes/skills/`, затем `/reload-skills` |
+| 6 | **officecli** | AI-friendly CLI для .docx/.xlsx/.pptx: создание, анализ, proofreading, правки, диаграммы. Один бинарник, без Office-инсталла. Наш внутренний (user-owned) | скопировать каталог `skills/officecli/` в `~/.hermes/skills/` + поставить сам бинарник `officecli` (инструкция внутри SKILL.md) |
 
 ### Установка git-guardrails (hook)
 
@@ -45,6 +46,18 @@ hooks:
 | **pixel-perfect-ui** | Автономный цикл pixel-perfect вёрстки: render → screenshot → compare → fix (2–4 раунда) | `npx skills add corlab-tech/skills@pixel-perfect-ui -a hermes-agent -y` |
 | **screenshot-to-html** | Скриншот → HTML через vision. Принцип: реплицировать RENDERED state, не computed state | `npx skills add sevzq/screenshot-to-html@screenshot-to-html -a hermes-agent -y` |
 | **frontend-layout-vision** | Сводный пайплайн трёх выше — грузить ПЕРВЫМ перед вёрсткой по макету (наш, адаптирован под Vue 3.5 + Tailwind 4) | скопировать каталог из K98: `~/.hermes/skills/engineering/frontend-layout-vision/` |
+
+## Наши внутренние скиллы (не из ecosystem — свои, обновляются через этот repo)
+
+| Каталог в `skills/` | Что внутри |
+|---------|-----------|
+| `llm-wiki/` | восстановлен из curator-архива, Karpathy wiki |
+| `dox-setup/` | DOX (agent0ai) + наш RLM-генератор дочерних AGENTS.md (references/rlm-dox-generation.md) |
+| `officecli/` | user-owned: SKILL.md + gotchas pptx-декам. Памятка Паши: batch rows match, re-run = close+create --force, ячейки = /body/tbl[N]/tr[R]/tc[C], JSON в /tmp |
+
+Обновление инстансов: `git pull` этого репо → `cp -r skills/<name> ~/.hermes/skills/` → `/reload-skills`. Не через skills.sh.
+
+---
 
 ## Дополнительные (по профилю инстанса)
 
@@ -79,7 +92,7 @@ hooks:
 └── skills/
     ├── llm-wiki/                ← SKILL.md (Karpathy wiki)
     ├── dox-setup/               ← SKILL.md + references/scripts (DOX)
-    └── frontend-layout-vision/  ← сводный вёрсточный пайплайн (по запросу)
+    └── officecli/               ← SKILL.md + references (Office-документы)
 ```
 
 Хранение версий: скиллы 1/2 всегда свежие из skills.sh (поставщик сам апдейтит); 3–5 копируются с K98 и обновляются git-пуллом этого репо.
