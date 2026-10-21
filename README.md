@@ -2,31 +2,31 @@
 
 ![Hermes Skills](banner.jpg)
 
-**Маст-хэв набір скиллів для інстансів [Hermes Agent](https://github.com/NousResearch/hermes-agent).**
+**Маст-хэв набор скиллов для инстансов [Hermes Agent](https://github.com/NousResearch/hermes-agent).**
 
-Ця колекція містить базовий набір скиллів, які корисні (або прямо необхідні) для кожного інстансу агента Hermes: автоматичний пошук і встановлення нових скиллів, створення власних, захист git від небезпечних команд, персистентна база знань, робота з Office-документами.
+Коллекция базовых скиллов, полезных каждому инстансу агента Hermes: автоматический поиск и установка новых скиллов, создание собственных, защита git от опасных команд, персистентная база знаний, работа с Office-документами.
 
-> Базовий набір із 6 позицій закриває ~80% типових задач агента. Дизайн-пак — для профілів, що рендерять UI. Розділ «Внутрішні» — власні скилли, яких немає в екосистемі.
+> Базовый набор из 6 позиций закрывает ~80% типовых задач агента. Дизайн-пак — для профилей, рендерящих UI. Раздел «Внутренние» — собственные скиллы, которых нет в экосистеме.
 
-## Склад базового набору
+## Состав базового набора
 
-| Скилл | Що робить | Установка |
+| Скилл | Что делает | Установка |
 |-------|-----------|-----------|
-| **[find-skills](https://skills.sh)** | Агент сам знаходить і ставить потрібні скилли через `npx skills`. Мета-навичка — ставиться першою | `npx skills add vercel-labs/find-skills -a hermes-agent -y` |
-| **[skill-creator](https://skills.sh)** | Агент сам створює/редагує/тестує скилли за каноном SKILL.md | `npx skills add anthropics/skill-creator -a hermes-agent -y` |
-| **git-guardrails** | Хук, що блокує небезпечні git-команди: `push --force`, `reset --hard`, `branch -D`, `clean -f` | [hooks/block-dangerous-git.sh](hooks/block-dangerous-git.sh) + секція у config.yaml |
-| **[llm-wiki](skills/llm-wiki/SKILL.md)** | Персистентна wiki-база знань у маркдауні (патерн Andrej Karpathy): інжест джерел, крос-посилання, лінт консистентності. Альтернатива RAG | у цьому репо: `skills/llm-wiki/` |
-| **[dox-setup](skills/dox-setup/SKILL.md)** | DOX-фреймворк ([agent0ai/dox](https://github.com/agent0ai/dox)): ієрархія AGENTS.md, агент читає ланцюжок до редагувань і оновлює після | у цьому репо: `skills/dox-setup/` |
-| **[officecli](skills/officecli/SKILL.md)** | CLI для .docx/.xlsx/.pptx: створення, аналіз, перевірка, діаграми. Одна бінарка, без Office-встановлення | у цьому репо: `skills/officecli/` + бінарний `officecli` |
+| **[find-skills](https://skills.sh)** | Агент сам находит и ставит нужные скиллы через `npx skills`. Мета-скилл — ставится первым | `npx skills add vercel-labs/find-skills -a hermes-agent -y` |
+| **[skill-creator](https://skills.sh)** | Агент сам создаёт/правит/тестирует скиллы по канону SKILL.md | `npx skills add anthropics/skill-creator -a hermes-agent -y` |
+| **git-guardrails** | Хук, блокирующий опасные git-команды: `push --force`, `reset --hard`, `branch -D`, `clean -f` | [hooks/block-dangerous-git.sh](hooks/block-dangerous-git.sh) + секция в config.yaml |
+| **[llm-wiki](skills/llm-wiki/SKILL.md)** | Персистентная wiki-база знаний в маркдауне (паттерн Andrej Karpathy): инжест источников, кросс-ссылки, линт консистентности. Альтернатива RAG | в этом репо: `skills/llm-wiki/` |
+| **[dox-setup](skills/dox-setup/SKILL.md)** | DOX-фреймворк ([agent0ai/dox](https://github.com/agent0ai/dox)): иерархия AGENTS.md, агент читает цепочку до правок и обновляет после | в этом репо: `skills/dox-setup/` |
+| **[officecli](skills/officecli/SKILL.md)** | CLI для .docx/.xlsx/.pptx: создание, анализ, проверка, диаграммы. Один бинарник, без установки Office | в этом репо: `skills/officecli/` + бинарник `officecli` |
 
-## Швидкий старт
+## Быстрый старт
 
 ```bash
-# 1. З екосистеми skills.sh
+# 1. Из экосистемы skills.sh
 npx skills add vercel-labs/find-skills -a hermes-agent -y
 npx skills add anthropics/skill-creator -a hermes-agent -y
 
-# 2. З цього репо
+# 2. Из этого репо
 git clone https://github.com/defdis/hermes-agent-must-have-skills.git
 cp -r hermes-agent-must-have-skills/skills/{llm-wiki,dox-setup,officecli} ~/.hermes/skills/
 
@@ -35,7 +35,7 @@ cp hermes-agent-must-have-skills/hooks/block-dangerous-git.sh ~/.hermes/hooks/
 chmod +x ~/.hermes/hooks/block-dangerous-git.sh
 ```
 
-Реєстрація хука у `~/.hermes/config.yaml`:
+Регистрация хука в `~/.hermes/config.yaml`:
 
 ```yaml
 hooks:
@@ -43,36 +43,36 @@ hooks:
     - command: ~/.hermes/hooks/block-dangerous-git.sh
 ```
 
-## Масова установка (скрипт)
+## Массовая установка (скрипт)
 
-`install.sh` встановлює набір на список Docker-інстансів: `docker cp` скиллів і хука → реєстрація в config.yaml → curator adopt → рестарт gateway.
+`install.sh` устанавливает набор на список Docker-инстансов: `docker cp` скиллов и хука → регистрация в config.yaml → curator adopt → рестарт gateway.
 
 ```bash
-./install.sh "ім'я1 ім'я2 ..."
+./install.sh "имя1 имя2 ..."
 ```
 
-## Додатково (за профілем інстансу)
+## Дополнительно (по профилю инстанса)
 
-Дизайн/фронт-пак і профільні скилли — у [wiki на K98](https://github.com/defdis), за потреби: layout-grid, pixel-perfect-ui, screenshot-to-html, mermaid-diagrams, github-auth, polza-image-generation.
+Дизайн/фронт-пак и профильные скиллы ставятся по потребности: layout-grid, pixel-perfect-ui, screenshot-to-html, mermaid-diagrams, github-auth, polza-image-generation.
 
-## Структура репозиторія
+## Структура репозитория
 
 ```
-├── README.md                    ← цей файл
-├── install.sh                   ← масова установка на Docker-інстанси
-├── banner.jpg                   ← обкладинка
+├── README.md                    ← этот файл
+├── install.sh                   ← массовая установка на Docker-инстансы
+├── banner.jpg                   ← обложка
 ├── hooks/
 │   └── block-dangerous-git.sh   ← git-guardrails хук
 └── skills/
     ├── llm-wiki/                ← Karpathy wiki
-    ├── dox-setup/               ← DOX (AGENTS.md ієрархія)
-    └── officecli/               ← Office-документи
+    ├── dox-setup/               ← DOX (иерархия AGENTS.md)
+    └── officecli/               ← Office-документы
 ```
 
-## Ліцензія
+## Лицензия
 
-Скилли екосистеми — під власними ліцензіями авторів (MIT/Apache). Внутрішні скилли — MIT.
+Скиллы экосистемы — под лицензиями авторов (MIT/Apache). Внутренние скиллы — MIT.
 
 ---
 
-*Хостинґ: defdis · оновлено 21.10.2026*
+*Автор: defdis · обновлено 21.10.2026*
