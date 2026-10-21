@@ -1,8 +1,42 @@
 # K98 Hermes Skills — маст-хэв сет для флотилии инстансов Hermes Agent
 
+![Hermes Skills](banner.jpg)
+
 > Каталог скиллов, обязательных/полезных для всех инстансов [Hermes Agent](https://github.com/NousResearch/hermes-agent) на K98.
 > Не вендор-база знаний, а рабочий сет: что ставить, откуда, как проверять.
 > Хозяин: defdis · Сервер: K98 · Обновлено: 21.10.2026
+
+---
+
+## Что это
+
+Набор маст-хэв скиллов для **Hermes Agent** — мультиагентной платформы на K98 (16 инстансов Telegram-ботов). Каждый инстанс — отдельный AI-агент со своим контекстом, скиллы нужны всем: поиск и установка новых, создание своих, защита git, базы знаний, документы.
+
+Базовый сет из **6 позиций** закрывает 80% типовых задач агента. Дизайн-пак ставится профилям, рендерящим UI. Секция «Наши внутренние» — собственные скиллы не из экосистемы, обновляются через это репо.
+
+## Быстрый старт (один инстанс)
+
+```bash
+# 1. Мета-скилл и skill-creator — из экосистемы skills.sh
+npx skills add vercel-labs/find-skills -a hermes-agent -y
+npx skills add anthropics/skill-creator -a hermes-agent -y
+
+# 2. Внутренние — из этого репо
+git clone git@github.com:defdis/hermes-agent-must-have-skills.git
+cp -r hermes-agent-must-have-skills/skills/{llm-wiki,dox-setup,officecli} ~/.hermes/skills/
+
+# 3. git-guardrails hook
+cp hermes-agent-must-have-skills/hooks/block-dangerous-git.sh ~/.hermes/hooks/
+chmod +x ~/.hermes/hooks/block-dangerous-git.sh
+# + секция hooks в config.yaml (см. ниже)
+
+# 4. Перечитать скиллы
+hermes reload-skills   # или /reload-skills из чата
+```
+
+## Массовая установка (флот)
+
+`install.sh` катает сет по списку Docker-инстансов: `./install.sh "zema zkatya kuba"` — docker cp → hook → config.yaml → curator adopt → restart gateway.
 
 ---
 
