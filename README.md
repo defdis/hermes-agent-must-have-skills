@@ -63,7 +63,6 @@ hooks:
 
 | Скилл | Профиль |
 |-------|---------|
-| officecli (+docx/xlsx/pptx/pdf) | документооборот |
 | mermaid-diagrams | диаграммы в ответах |
 | github-auth, github-issue-to-pr | работа с GitHub |
 | polza-image-generation | генерация изображений (Polza MCP) |
