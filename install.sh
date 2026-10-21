@@ -1,6 +1,6 @@
 #!/bin/bash
 # Массовая установка базового сета скиллов на инстансы Hermes (K98)
-# Использование: ./install.sh "zema zkatya kuba ..."
+# Использование: ./install.sh "имя1 имя2 ..."
 # Docker-инстансы: docker cp + adopt. Bare-metal: пропускаются с предупреждением (пока вручную).
 
 set -euo pipefail

@@ -1,131 +1,78 @@
-# K98 Hermes Skills — маст-хэв сет для флотилии инстансов Hermes Agent
+# hermes-agent-must-have-skills
 
 ![Hermes Skills](banner.jpg)
 
-> Каталог скиллов, обязательных/полезных для всех инстансов [Hermes Agent](https://github.com/NousResearch/hermes-agent) на K98.
-> Не вендор-база знаний, а рабочий сет: что ставить, откуда, как проверять.
-> Хозяин: defdis · Сервер: K98 · Обновлено: 21.10.2026
+**Маст-хэв набір скиллів для інстансів [Hermes Agent](https://github.com/NousResearch/hermes-agent).**
 
----
+Ця колекція містить базовий набір скиллів, які корисні (або прямо необхідні) для кожного інстансу агента Hermes: автоматичний пошук і встановлення нових скиллів, створення власних, захист git від небезпечних команд, персистентна база знань, робота з Office-документами.
 
-## Что это
+> Базовий набір із 6 позицій закриває ~80% типових задач агента. Дизайн-пак — для профілів, що рендерять UI. Розділ «Внутрішні» — власні скилли, яких немає в екосистемі.
 
-Набор маст-хэв скиллов для **Hermes Agent** — мультиагентной платформы на K98 (16 инстансов Telegram-ботов). Каждый инстанс — отдельный AI-агент со своим контекстом, скиллы нужны всем: поиск и установка новых, создание своих, защита git, базы знаний, документы.
+## Склад базового набору
 
-Базовый сет из **6 позиций** закрывает 80% типовых задач агента. Дизайн-пак ставится профилям, рендерящим UI. Секция «Наши внутренние» — собственные скиллы не из экосистемы, обновляются через это репо.
+| Скилл | Що робить | Установка |
+|-------|-----------|-----------|
+| **[find-skills](https://skills.sh)** | Агент сам знаходить і ставить потрібні скилли через `npx skills`. Мета-навичка — ставиться першою | `npx skills add vercel-labs/find-skills -a hermes-agent -y` |
+| **[skill-creator](https://skills.sh)** | Агент сам створює/редагує/тестує скилли за каноном SKILL.md | `npx skills add anthropics/skill-creator -a hermes-agent -y` |
+| **git-guardrails** | Хук, що блокує небезпечні git-команди: `push --force`, `reset --hard`, `branch -D`, `clean -f` | [hooks/block-dangerous-git.sh](hooks/block-dangerous-git.sh) + секція у config.yaml |
+| **[llm-wiki](skills/llm-wiki/SKILL.md)** | Персистентна wiki-база знань у маркдауні (патерн Andrej Karpathy): інжест джерел, крос-посилання, лінт консистентності. Альтернатива RAG | у цьому репо: `skills/llm-wiki/` |
+| **[dox-setup](skills/dox-setup/SKILL.md)** | DOX-фреймворк ([agent0ai/dox](https://github.com/agent0ai/dox)): ієрархія AGENTS.md, агент читає ланцюжок до редагувань і оновлює після | у цьому репо: `skills/dox-setup/` |
+| **[officecli](skills/officecli/SKILL.md)** | CLI для .docx/.xlsx/.pptx: створення, аналіз, перевірка, діаграми. Одна бінарка, без Office-встановлення | у цьому репо: `skills/officecli/` + бінарний `officecli` |
 
-## Быстрый старт (один инстанс)
+## Швидкий старт
 
 ```bash
-# 1. Мета-скилл и skill-creator — из экосистемы skills.sh
+# 1. З екосистеми skills.sh
 npx skills add vercel-labs/find-skills -a hermes-agent -y
 npx skills add anthropics/skill-creator -a hermes-agent -y
 
-# 2. Внутренние — из этого репо
-git clone git@github.com:defdis/hermes-agent-must-have-skills.git
+# 2. З цього репо
+git clone https://github.com/defdis/hermes-agent-must-have-skills.git
 cp -r hermes-agent-must-have-skills/skills/{llm-wiki,dox-setup,officecli} ~/.hermes/skills/
 
-# 3. git-guardrails hook
+# 3. Git-guardrails
 cp hermes-agent-must-have-skills/hooks/block-dangerous-git.sh ~/.hermes/hooks/
 chmod +x ~/.hermes/hooks/block-dangerous-git.sh
-# + секция hooks в config.yaml (см. ниже)
-
-# 4. Перечитать скиллы
-hermes reload-skills   # или /reload-skills из чата
 ```
 
-## Массовая установка (флот)
+Реєстрація хука у `~/.hermes/config.yaml`:
 
-`install.sh` катает сет по списку Docker-инстансов: `./install.sh "zema zkatya kuba"` — docker cp → hook → config.yaml → curator adopt → restart gateway.
-
----
-
-## Базовый сет (всем инстансам Hermes)
-
-| # | Скилл | Что делает | Установка |
-|---|-------|------------|-----------|
-| 1 | **find-skills** | Агент сам находит и ставит недостающие скиллы через `npx skills` и API skills.sh. Мета-скилл — ставится первым | `npx skills add vercel-labs/find-skills -a hermes-agent -y` |
-| 2 | **skill-creator** | Агент сам создаёт/правит/измеряет скиллы по канону SKILL.md | `npx skills add anthropics/skill-creator -a hermes-agent -y` |
-| 3 | **git-guardrails** | Защита от git-факапов: блокирует `push --force`, `reset --hard`, `branch -D`, `clean -f`. Реализован как Hermes **Hook**, не скилл | см. [hooks/block-dangerous-git.sh](hooks/block-dangerous-git.sh) + инструкция ниже |
-| 4 | **llm-wiki** | Karpathy-паттерн: персистентная wiki-база знаний в маркдауне — инжест источников, кросс-ссылки, консистент-линт. RAG-альтернатива | скопировать каталог `skills/llm-wiki/` в `~/.hermes/skills/`, затем `/reload-skills` |
-| 5 | **dox-setup** | DOX = self-documenting проекты (agent0ai/dox): иерархия AGENTS.md, агент читает цепочку до правок и обновляет после | скопировать каталог `skills/dox-setup/` в `~/.hermes/skills/`, затем `/reload-skills` |
-| 6 | **officecli** | AI-friendly CLI для .docx/.xlsx/.pptx: создание, анализ, proofreading, правки, диаграммы. Один бинарник, без Office-инсталла. Наш внутренний (user-owned) | скопировать каталог `skills/officecli/` в `~/.hermes/skills/` + поставить сам бинарник `officecli` (инструкция внутри SKILL.md) |
-
-### Установка git-guardrails (hook)
-
-Hermes умеет гонять bash-хук перед опасными командами терминала. Два шага:
-
-1. Скопировать скрипт:
-```bash
-cp hooks/block-dangerous-git.sh ~/.hermes/hooks/
-chmod +x ~/.hermes/hooks/block-dangerous-git.sh
-```
-
-2. Прописать в `~/.hermes/config.yaml`:
 ```yaml
 hooks:
   tool_use:
     - command: ~/.hermes/hooks/block-dangerous-git.sh
 ```
 
-Поведение: любая команда, совпадающая со списком паттернов внутри скрипта, получает `BLOCKED: ... matches dangerous pattern ...` и не исполняется. Паттерны правятся в массиве `DANGEROUS_PATTERNS` внутри скрипта.
+## Масова установка (скрипт)
 
----
+`install.sh` встановлює набір на список Docker-інстансів: `docker cp` скиллів і хука → реєстрація в config.yaml → curator adopt → рестарт gateway.
 
-## Дизайн/фронт-пак (для инстансов, рендерящих UI)
+```bash
+./install.sh "ім'я1 ім'я2 ..."
+```
 
-| Скилл | Что | Установка |
-|-------|-----|-----------|
-| **layout-grid** | Grid-сетки: 4/8/12 колонок, breakpoints 375/768/1024/1440, gutters/margins | `npx skills add owl-listener/designer-skills@layout-grid -a hermes-agent -y` |
-| **pixel-perfect-ui** | Автономный цикл pixel-perfect вёрстки: render → screenshot → compare → fix (2–4 раунда) | `npx skills add corlab-tech/skills@pixel-perfect-ui -a hermes-agent -y` |
-| **screenshot-to-html** | Скриншот → HTML через vision. Принцип: реплицировать RENDERED state, не computed state | `npx skills add sevzq/screenshot-to-html@screenshot-to-html -a hermes-agent -y` |
-| **frontend-layout-vision** | Сводный пайплайн трёх выше — грузить ПЕРВЫМ перед вёрсткой по макету (наш, адаптирован под Vue 3.5 + Tailwind 4) | скопировать каталог из K98: `~/.hermes/skills/engineering/frontend-layout-vision/` |
+## Додатково (за профілем інстансу)
 
-## Наши внутренние скиллы (не из ecosystem — свои, обновляются через этот repo)
+Дизайн/фронт-пак і профільні скилли — у [wiki на K98](https://github.com/defdis), за потреби: layout-grid, pixel-perfect-ui, screenshot-to-html, mermaid-diagrams, github-auth, polza-image-generation.
 
-| Каталог в `skills/` | Что внутри |
-|---------|-----------|
-| `llm-wiki/` | восстановлен из curator-архива, Karpathy wiki |
-| `dox-setup/` | DOX (agent0ai) + наш RLM-генератор дочерних AGENTS.md (references/rlm-dox-generation.md) |
-| `officecli/` | user-owned: SKILL.md + gotchas pptx-декам. Памятка Паши: batch rows match, re-run = close+create --force, ячейки = /body/tbl[N]/tr[R]/tc[C], JSON в /tmp |
-
-Обновление инстансов: `git pull` этого репо → `cp -r skills/<name> ~/.hermes/skills/` → `/reload-skills`. Не через skills.sh.
-
----
-
-## Дополнительные (по профилю инстанса)
-
-| Скилл | Профиль |
-|-------|---------|
-| mermaid-diagrams | диаграммы в ответах |
-| github-auth, github-issue-to-pr | работа с GitHub |
-| polza-image-generation | генерация изображений (Polza MCP) |
-| tech-digest-aggregation | дайджесты при поломанном web_search |
-
-## Отказано в сет-апе (осознанно)
-
-- **agent-browser** (1.1M инстоллов) — у Hermes свои встроенные browser-инструменты
-- **systematic-debugging** (obra) — есть локальный аналог `debugging-and-error-recovery` (собственный)
-- vendor-скиллы (supabase/convex/azure/firebase) — useless если vendor не твой
-- hyperframes и прочие 900k-банеры — демо-инстоллы, спам
-
----
-
-## Массовая установка скриптом
-
-См. [install.sh](install.sh) — катает базовый сет по списку инстансов (Docker и bare-metal).
-
-## Содержимое репо
+## Структура репозиторія
 
 ```
-├── README.md                    ← этот файл
-├── install.sh                   ← массовая установка по списку инстансов
+├── README.md                    ← цей файл
+├── install.sh                   ← масова установка на Docker-інстанси
+├── banner.jpg                   ← обкладинка
 ├── hooks/
-│   └── block-dangerous-git.sh   ← git-guardrails hook для Hermes
+│   └── block-dangerous-git.sh   ← git-guardrails хук
 └── skills/
-    ├── llm-wiki/                ← SKILL.md (Karpathy wiki)
-    ├── dox-setup/               ← SKILL.md + references/scripts (DOX)
-    └── officecli/               ← SKILL.md + references (Office-документы)
+    ├── llm-wiki/                ← Karpathy wiki
+    ├── dox-setup/               ← DOX (AGENTS.md ієрархія)
+    └── officecli/               ← Office-документи
 ```
 
-Хранение версий: скиллы 1/2 всегда свежие из skills.sh (поставщик сам апдейтит); 3–5 копируются с K98 и обновляются git-пуллом этого репо.
+## Ліцензія
+
+Скилли екосистеми — під власними ліцензіями авторів (MIT/Apache). Внутрішні скилли — MIT.
+
+---
+
+*Хостинґ: defdis · оновлено 21.10.2026*
