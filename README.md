@@ -50,6 +50,8 @@ hooks:
 | **[skill-creator](https://skills.sh)** | сам создаёт и правит скиллы по канону SKILL.md |
 | **git-guardrails** | хук, блокирующий `push --force`, `reset --hard`, `branch -D`, `clean -f` |
 | **[llm-wiki](skills/llm-wiki/SKILL.md)** | персистентная база знаний в маркдауне (паттерн Karpathy), альтернатива RAG |
+| **[security-audit](skills/security-audit/SKILL.md)** | многофазный security-аудит кода с машиночитаемыми находками (адаптация cloudflare/security-audit-skill, MIT) |
+| **[sandboxed-output](skills/sandboxed-output/SKILL.md)** | большие выходы (логи, тесты, API) — через execute_code, в контекст только результаты (методология mksglu/context-mode, ELv2) |
 | **[dox-setup](skills/dox-setup/SKILL.md)** | self-documenting проекты: иерархия AGENTS.md ([agent0ai/dox](https://github.com/agent0ai/dox)) |
 | **[officecli](skills/officecli/SKILL.md)** | .docx/.xlsx/.pptx без установленного Office — один бинарник |
 | **[grafity](skills/grafity/SKILL.md)** | код-граф репозитория (code-review-graph): кто вызывает функцию, blast radius, dead code — вместо чтения целых файлов |
@@ -62,6 +64,8 @@ hooks:
 ├── hooks/block-dangerous-git.sh
 └── skills/
     ├── llm-wiki/
+    ├── security-audit/
+    ├── sandboxed-output/
     ├── dox-setup/
     ├── officecli/
     └── grafity/
