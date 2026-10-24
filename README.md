@@ -4,7 +4,7 @@
 
 **Маст-хэв скиллы для [Hermes Agent](https://github.com/NousResearch/hermes-agent).**
 
-Готовый набор из 6 скиллов, которые стоит иметь каждому агенту Hermes. Закрывают 80% типовых задач: поиск и установка новых скиллов, создание собственных, защита git, база знаний, работа с документами.
+Готовый набор из 7 скиллов, которые стоит иметь каждому агенту Hermes. Закрывают 80% типовых задач: поиск и установка новых скиллов, создание собственных, защита git, база знаний, работа с документами.
 
 ## Как поставить
 
@@ -52,6 +52,7 @@ hooks:
 | **[llm-wiki](skills/llm-wiki/SKILL.md)** | персистентная база знаний в маркдауне (паттерн Karpathy), альтернатива RAG |
 | **[dox-setup](skills/dox-setup/SKILL.md)** | self-documenting проекты: иерархия AGENTS.md ([agent0ai/dox](https://github.com/agent0ai/dox)) |
 | **[officecli](skills/officecli/SKILL.md)** | .docx/.xlsx/.pptx без установленного Office — один бинарник |
+| **[grafity](skills/grafity/SKILL.md)** | код-граф репозитория (code-review-graph): кто вызывает функцию, blast radius, dead code — вместо чтения целых файлов |
 
 ## Структура
 
@@ -62,7 +63,8 @@ hooks:
 └── skills/
     ├── llm-wiki/
     ├── dox-setup/
-    └── officecli/
+    ├── officecli/
+    └── grafity/
 ```
 
 ## Лицензия
