@@ -27,7 +27,7 @@ npx skills add anthropics/skill-creator -a hermes-agent -y
 
 # из этого репо
 git clone https://github.com/defdis/hermes-agent-must-have-skills.git /tmp/must-have-skills
-cp -r /tmp/must-have-skills/skills/{llm-wiki,dox-setup,officecli} ~/.hermes/skills/
+cp -r /tmp/must-have-skills/skills/{llm-wiki,dox-setup,officecli,grafity} ~/.hermes/skills/
 
 # git-guardrails (хук, не скилл)
 cp /tmp/must-have-skills/hooks/block-dangerous-git.sh ~/.hermes/hooks/
