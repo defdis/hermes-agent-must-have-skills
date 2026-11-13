@@ -4,7 +4,7 @@
 
 **Маст-хэв скиллы для [Hermes Agent](https://github.com/NousResearch/hermes-agent).**
 
-Готовый набор из 7 скиллов, которые стоит иметь каждому агенту Hermes. Закрывают 80% типовых задач: поиск и установка новых скиллов, создание собственных, защита git, база знаний, работа с документами.
+Готовый набор из 13 скиллов, которые стоит иметь каждому агенту Hermes. Закрывают 80% типовых задач: поиск и установка новых скиллов, создание собственных, защита git, база знаний, работа с документами, цвет и дизайн.
 
 ## Как поставить
 
@@ -27,7 +27,7 @@ npx skills add anthropics/skill-creator -a hermes-agent -y
 
 # из этого репо
 git clone https://github.com/defdis/hermes-agent-must-have-skills.git /tmp/must-have-skills
-cp -r /tmp/must-have-skills/skills/{llm-wiki,dox-setup,officecli,grafity} ~/.hermes/skills/
+cp -r /tmp/must-have-skills/skills/{llm-wiki,dox-setup,officecli,grafity,color-expert} ~/.hermes/skills/
 
 # git-guardrails (хук, не скилл)
 cp /tmp/must-have-skills/hooks/block-dangerous-git.sh ~/.hermes/hooks/
@@ -55,6 +55,7 @@ hooks:
 | **[dox-setup](skills/dox-setup/SKILL.md)** | self-documenting проекты: иерархия AGENTS.md ([agent0ai/dox](https://github.com/agent0ai/dox)) |
 | **[officecli](skills/officecli/SKILL.md)** | .docx/.xlsx/.pptx без установленного Office — один бинарник |
 | **[grafity](skills/grafity/SKILL.md)** | код-граф репозитория (code-review-graph): кто вызывает функцию, blast radius, dead code — вместо чтения целых файлов |
+| **[color-expert](skills/color-expert/SKILL.md)** | база знаний по цвету: OKLCH/OKLab, гаммы, контраст WCAG/APCA, гармонии, микширование красок, имена цветов (185 референс-файлов, CC-BY-4.0) |
 
 ## Структура
 
@@ -68,12 +69,13 @@ hooks:
     ├── sandboxed-output/
     ├── dox-setup/
     ├── officecli/
-    └── grafity/
+    ├── grafity/
+    └── color-expert/
 ```
 
 ## Лицензия
 
-Скиллы экосистемы — лицензии авторов (MIT/Apache). Остальное — MIT.
+Скиллы экосистемы — лицензии авторов (MIT/Apache); `color-expert` — CC-BY-4.0 (файл LICENSE внутри). Остальное — MIT.
 
 ---
 
@@ -96,6 +98,7 @@ hooks:
 - `llm-wiki`: попроси создать базу знаний — должен запустить инжест в маркдаун
 - `dox-setup`: «докс'ни» текущий проект — должны появиться AGENTS.md
 - `officecli`: попроси создать тестовый .docx — должен пойти через бинарник
+- `color-expert`: спроси «собери OKLCH-рампу 9 шагов под брендовый акцент» — ответ должен ссылаться на `references/`
 
 **6. Пользуйся по назначению.** Скиллы срабатывают по триггеру из индекса — «найди скилл» → find-skills, «создай скилл» → skill-creator, «докс'ни» → dox-setup. Не надо вызывать их руками.
 
