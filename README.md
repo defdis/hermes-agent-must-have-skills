@@ -4,7 +4,7 @@
 
 **Маст-хэв скиллы для [Hermes Agent](https://github.com/NousResearch/hermes-agent).**
 
-Готовый набор из 13 скиллов, которые стоит иметь каждому агенту Hermes. Закрывают 80% типовых задач: поиск и установка новых скиллов, создание собственных, защита git, база знаний, работа с документами, цвет и дизайн.
+Готовый набор из 15 скиллов, которые стоит иметь каждому агенту Hermes. Закрывают 80% типовых задач: поиск и установка новых скиллов, создание собственных, защита git, база знаний, работа с документами, цвет и дизайн.
 
 ## Как поставить
 
@@ -27,7 +27,7 @@ npx skills add anthropics/skill-creator -a hermes-agent -y
 
 # из этого репо
 git clone https://github.com/defdis/hermes-agent-must-have-skills.git /tmp/must-have-skills
-cp -r /tmp/must-have-skills/skills/{llm-wiki,dox-setup,officecli,grafity,color-expert} ~/.hermes/skills/
+cp -r /tmp/must-have-skills/skills/{llm-wiki,dox-setup,officecli,grafity,color-expert,grill-me,grilling} ~/.hermes/skills/
 
 # git-guardrails (хук, не скилл)
 cp /tmp/must-have-skills/hooks/block-dangerous-git.sh ~/.hermes/hooks/
@@ -56,6 +56,7 @@ hooks:
 | **[officecli](skills/officecli/SKILL.md)** | .docx/.xlsx/.pptx без установленного Office — один бинарник |
 | **[grafity](skills/grafity/SKILL.md)** | код-граф репозитория (code-review-graph): кто вызывает функцию, blast radius, dead code — вместо чтения целых файлов |
 | **[color-expert](skills/color-expert/SKILL.md)** | база знаний по цвету: OKLCH/OKLab, гаммы, контраст WCAG/APCA, гармонии, микширование красок, имена цветов (185 референс-файлов, CC-BY-4.0) |
+| **[grill-me](skills/grill-me/SKILL.md)** + **[grilling](skills/grilling/SKILL.md)** | жёсткий допрос по плану/решению: раунды вопросов по дереву решений, факты ищет агент сам (delegate_task), решения — за юзером |
 
 ## Структура
 
@@ -70,7 +71,9 @@ hooks:
     ├── dox-setup/
     ├── officecli/
     ├── grafity/
-    └── color-expert/
+    ├── color-expert/
+    ├── grill-me/
+    └── grilling/
 ```
 
 ## Лицензия
@@ -99,6 +102,7 @@ hooks:
 - `dox-setup`: «докс'ни» текущий проект — должны появиться AGENTS.md
 - `officecli`: попроси создать тестовый .docx — должен пойти через бинарник
 - `color-expert`: спроси «собери OKLCH-рампу 9 шагов под брендовый акцент» — ответ должен ссылаться на `references/`
+- `grill-me`: скажи «жёстко проверь мой план» — должен пойти раунд вопросов по дереву решений
 
 **6. Пользуйся по назначению.** Скиллы срабатывают по триггеру из индекса — «найди скилл» → find-skills, «создай скилл» → skill-creator, «докс'ни» → dox-setup. Не надо вызывать их руками.
 
